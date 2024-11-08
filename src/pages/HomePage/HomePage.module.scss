@@ -1,0 +1,66 @@
+.wrapper-homepage {
+  padding-left: 30px;
+  padding-top: 20px;
+}
+
+.homepage-title {
+  font-size: 30px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #115ca8;
+}
+
+.cart-component {
+  padding: 20px;
+  display: flex;
+  gap: 50px;
+}
+.cart-item {
+  aspect-ratio: 1.6;
+  height: 200px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #90b7ff;
+}
+
+.cart-name {
+  padding: 5px 10px;
+  background: #ffcd59;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: #115ca8;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+}
+.wrapper-icon {
+  height: 120px;
+  box-shadow: 0 1px 2px 1px #ffdf7a;
+  border-radius: 50%;
+  background: #fff9db;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content-card {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  padding-left: 30px;
+}
+
+.wrapper-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding-right: 30px;
+}
+
+.num-temperature {
+  font-size: 50px;
+  font-weight: 500;
+}
