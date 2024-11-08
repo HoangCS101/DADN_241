@@ -1,6 +1,6 @@
 import React from "react";
 
-import AreaChart from '../charts/AreaChart';
+import AreaChart from "../../charts/AreaChart";
 function Dashboard() {
   return (
     <div>
