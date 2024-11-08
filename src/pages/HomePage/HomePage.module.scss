@@ -1,5 +1,5 @@
 .wrapper-homepage {
-  padding-left: 30px;
+  padding-left: 70px;
   padding-top: 20px;
 }
 
@@ -8,7 +8,21 @@
   font-weight: 600;
   text-transform: uppercase;
   color: #115ca8;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 40px;
 }
+.icon-image {
+  width: 50px;
+  height: 50px;
+  border: 2px solid;
+  border-radius: 50%;
+}
+.icon-image-2 {
+  width: 50px;
+}
+
 
 .cart-component {
   padding: 20px;
