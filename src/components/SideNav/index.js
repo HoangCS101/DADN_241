@@ -5,7 +5,7 @@ function SideNav() {
   return (
     <div>
       {/* Main Sidebar Container */}
-      <aside className="main-sidebar sidebar-dark-primary elevation-4">
+      <aside className="main-sidebar sidebar-dark-primary elevation-4" style={{ top: '100px' }}>
         {/* Brand Logo */}
         <a href="index3.html" className="brand-link">
           <img
