@@ -7,19 +7,43 @@ import React, { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 import axios from "axios";
 import DefaultLayout from "./../../layouts/DefaultLayout/index";
-import NhietdoDoam from "../../assets/images/temperature_humidity.png"
-import TimeUsing from "../../assets/images/time_using.png"
+import NhietdoDoam from "../../assets/images/temperature_humidity.png";
+import TimeUsing from "../../assets/images/time_using.png";
 
 const cx = classNames.bind(styles);
+async function fetchAllDataSensor() {
+  const URL_API_ALL_DATA_SENSOR =
+    "http://10.28.128.126:8080/api/sensors/all/vinhnguyenkhac20@gmail.com";
+
+  try {
+    const response_all_data_sensor = await fetch(URL_API_ALL_DATA_SENSOR);
+    if (!response_all_data_sensor.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const all_data_sensor = response_all_data_sensor.json();
+
+    all_data_sensor.data.sensor_data.forEach((item) => {
+      console.log(item);
+    });
+  } catch {}
+}
+document.addEventListener("DOMContentLoaded", async function () {
+  fetchAllDataSensor();
+});
 function Home() {
   const Temperature = 37;
   const Humidity = 60;
+
   return (
     <DefaultLayout>
       <div className={cx("wrapper-homepage")}>
         <div className={cx("homepage-title")}>
           <div className={cx("title-icon")}>
-            <img className={cx('icon-image')} src={NhietdoDoam} alt="Temperature and Humidity" />
+            <img
+              className={cx("icon-image")}
+              src={NhietdoDoam}
+              alt="Temperature and Humidity"
+            />
           </div>
           <div className={cx("title-text")}>Thống kê hiện tại</div>
         </div>
@@ -58,7 +82,11 @@ function Home() {
         {/* ---------------------End Section 1------------------------- */}
         <div className={cx("homepage-title")}>
           <div className={cx("title-icon")}>
-            <img className={cx('icon-image-2')} src={TimeUsing} alt="Temperature and Humidity" />
+            <img
+              className={cx("icon-image-2")}
+              src={TimeUsing}
+              alt="Temperature and Humidity"
+            />
           </div>
           <div className={cx("title-text")}>Thời gian sử dụng hôm nay</div>
         </div>
