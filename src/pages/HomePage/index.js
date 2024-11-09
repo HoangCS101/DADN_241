@@ -1,89 +1,162 @@
 import classNames from "classnames/bind";
-import styles from "./HomePage.module.scss"
-
-import React, { useEffect, useRef } from "react";
+import styles from "./HomePage.module.scss";
+import React, { useEffect, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 import axios from "axios";
+import { DefaultLayout } from "../../layouts";
 
 function Home() {
-  const fetchTemperature = async () => {
-    const apiKey = process.env.ADAFRUIT_IO_KEY;
-    const username = process.env.ADAFRUIT_IO_USERNAME;
-    const feedKey = "va-tem";
-    const baseUrl =
-      "https://io.adafruit.com/api/v2/" +
-      username +
-      "/feeds/" +
-      feedKey +
-      "/data";
+  const [sensorData, setSensorData] = useState({
+    temperatureData: [],
+    humidityData: [],
+    luxData: [],
+  });
 
+  async function fetchSensorData() {
     try {
-      const response = await axios.get(
-        `${baseUrl}/${username}/feeds/${feedKey}/data`,
-        {
-          headers: {
-            "X-AIO-Key": apiKey,
-          },
-        }
+      const response = await fetch(
+        "https://io.adafruit.com/api/v2/Vinhnguyen2003/feeds/sensors/data"
       );
-      console.log(response.data); // Temperature data from Adafruit
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      const responseData = await response.json();
+      
+
+      // Initialize arrays for temperature, humidity, and lux
+      const temperatureData = [];
+      const humidityData = [];
+      const luxData = [];
+
+      responseData.slice(0, 10).forEach((item) => {
+        const [email, temp, humid, lux] = item.value.split("_");
+        temperatureData.push(parseFloat(temp));
+        humidityData.push(parseFloat(humid));
+        luxData.push(parseFloat(lux));
+      });
+      console.log(temperatureData);
+      return { 
+        temperatureData: temperatureData.reverse(),
+        humidityData: humidityData.reverse(),
+        luxData: luxData.reverse(), 
+      };
     } catch (error) {
-      console.error("Error fetching temperature data:", error);
+      console.error("There was a problem with the fetch operation:", error);
     }
+  }
+
+  const updateData = async () => {
+    const newData = await fetchSensorData();
+    setSensorData(newData);
   };
+  
+  useEffect(() => {
+    updateData();
+    const intervalId = setInterval(updateData, 10000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const areaChartRef = useRef(null);
   const meterChartRef = useRef(null);
   const humidChartRef = useRef(null);
 
-  var areaChartData = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+  const TempChartData = {
+    labels: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
     datasets: [
       {
-        label: "Digital Goods",
-        backgroundColor: "rgba(60,141,188,0.5)", // Fill color with transparency
-        borderColor: "rgba(60,141,188,1)", // Line color
+        label: "Temperature",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgba(255, 99, 132, 1)",
         pointRadius: 4,
-        pointBackgroundColor: "#3b8bba", // Point color
+        pointBackgroundColor: "#ff6384",
         pointBorderColor: "#fff",
-        tension: 0.4, // Adds the smooth curve effect
-        fill: true, // Enables the area fill under the line
-        data: [28, 48, 40, 19, 86, 27, 90],
-      },
-      {
-        label: "Electronics",
-        backgroundColor: "rgba(210, 214, 222, 0.5)",
-        borderColor: "rgba(210, 214, 222, 1)",
-        pointRadius: 4,
-        pointBackgroundColor: "#c1c7d1",
-        pointBorderColor: "#fff",
-        tension: 0.4, // Smooth curve effect
-        fill: true, // Area fill
-        data: [65, 59, 80, 81, 56, 55, 40],
+        tension: 0.4,
+        fill: true,
+        data: sensorData.temperatureData,
       },
     ],
   };
 
-  const donutData = {
-    labels: ["Chrome", "IE", "FireFox", "Safari", "Opera", "Navigator"],
+  const HumidChartData = {
+    labels: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
     datasets: [
       {
-        data: [700, 500, 400, 600, 300, 100],
-        backgroundColor: [
-          "#f56954",
-          "#00a65a",
-          "#f39c12",
-          "#00c0ef",
-          "#3c8dbc",
-          "#d2d6de",
-        ],
+        label: "Humidity",
+        backgroundColor: "rgba(60,141,188,0.5)",
+        borderColor: "rgba(60,141,188,1)",
+        pointRadius: 4,
+        pointBackgroundColor: "#3b8bba",
+        pointBorderColor: "#fff",
+        tension: 0.4,
+        fill: true,
+        data: sensorData.humidityData,
+      },
+    ],
+  };
+
+  const areaChartOptions = {
+    maintainAspectRatio: false,
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { display: false } },
+    },
+    animation: false,
+  };
+
+  const meterChartOptions = {
+    type: "doughnut",
+    data: {
+      datasets: [
+        {
+          data: [sensorData.luxData[0] || 0, 100 - (sensorData.luxData[0] || 0)],
+          backgroundColor: ["#4caf50", "#d3d3d3"],
+          borderWidth: 0,
+          cutout: "70%",
+          circumference: 288,
+          rotation: 216,
+        },
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false },
+        centerText: { display: true, value: sensorData.luxData[0] || 0, unit: "Light" },
+      },
+      animation: false,
+    },
+    plugins: [
+      {
+        id: "centerText",
+        beforeDraw(chart) {
+          const { width, height, ctx } = chart;
+          ctx.restore();
+          const fontSize = (height / 160).toFixed(2);
+          ctx.font = `${fontSize}em sans-serif`;
+          ctx.textBaseline = "middle";
+
+          const text = chart.options.plugins.centerText.value.toString();
+          const unit = chart.options.plugins.centerText.unit;
+          const textX = Math.round((width - ctx.measureText(text).width) / 2);
+          const textY = height / 2 - 10;
+
+          ctx.fillStyle = "#000";
+          ctx.fillText(text, textX, textY);
+
+          ctx.font = `${(fontSize * 0.7).toFixed(2)}em sans-serif`;
+          const unitX = Math.round((width - ctx.measureText(unit).width) / 2);
+          ctx.fillText(unit, unitX, textY + 20);
+          ctx.save();
+        },
       },
     ],
   };
 
   useEffect(() => {
-    fetchTemperature();
-
     const charts = [];
 
     const initializeChart = (ref, config) => {
@@ -93,316 +166,73 @@ function Home() {
       }
     };
 
-    var areaChartOptions = {
-      maintainAspectRatio: false,
-      responsive: true,
-      legend: {
-        display: false,
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-      },
-    };
-
     initializeChart(areaChartRef, {
       type: "line",
-      data: areaChartData,
+      data: TempChartData,
       options: areaChartOptions,
     });
+
     initializeChart(humidChartRef, {
       type: "line",
-      data: areaChartData,
+      data: HumidChartData,
       options: areaChartOptions,
     });
-
-    //Add meterChart here
-    // Meter Chart Configuration (Speed Gauge)
-    const meterChartOptions = {
-      type: "doughnut",
-      data: {
-        datasets: [
-          {
-            data: [69, 31],
-            backgroundColor: ["#4caf50", "#d3d3d3"], // Green and light gray
-            borderWidth: 0,
-            cutout: "70%", // Hollow out the middle for gauge effect
-            circumference: 288, // Crops out 20% at the bottom (360 - 72 degrees)
-            rotation: 216, // Rotates to ensure the gap is at the bottom
-          },
-        ],
-      },
-      options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: false },
-          centerText: {
-            display: true,
-            value: "69", // Example value (adjust dynamically)
-            unit: "Light",
-          },
-        },
-      },
-      plugins: [
-        {
-          id: "centerText",
-          beforeDraw(chart) {
-            const { width, height, ctx } = chart;
-            ctx.restore();
-            const fontSize = (height / 160).toFixed(2);
-            ctx.font = `${fontSize}em sans-serif`;
-            ctx.textBaseline = "middle";
-
-            const text = chart.options.plugins.centerText.value;
-            const unit = chart.options.plugins.centerText.unit;
-            const textX = Math.round((width - ctx.measureText(text).width) / 2);
-            const textY = height / 2 - 10;
-
-            ctx.fillStyle = "#000";
-            ctx.fillText(text, textX, textY);
-
-            ctx.font = `${(fontSize * 0.7).toFixed(2)}em sans-serif`;
-            const unitX = Math.round((width - ctx.measureText(unit).width) / 2);
-            ctx.fillText(unit, unitX, textY + 20);
-            ctx.save();
-          },
-        },
-      ],
-    };
 
     initializeChart(meterChartRef, meterChartOptions);
 
     return () => {
       charts.forEach((chart) => chart.destroy());
     };
-  }, []);
+  }, [sensorData]);
 
   return (
-    <div className="content-wrapper">
-      <section className="content-header">
-        <div className="container-fluid">
-          <div className="row mb-2">
-            <div className="col-sm-6">
-              <h1>ChartJS</h1>
-            </div>
-            <div className="col-sm-6">
-              <ol className="breadcrumb float-sm-right">
-                <li className="breadcrumb-item">
-                  <a href="#">Home</a>
-                </li>
-                <li className="breadcrumb-item active">ChartJS</li>
-              </ol>
+    <DefaultLayout>
+      <div className="content-wrapper">
+        <section className="content-header">
+          <div className="container-fluid">
+            <div className="row mb-2">
+              <div className="col-sm-6">
+                <h1>ChartJS</h1>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-      {/* Main content */}
-      <section className="content">
-        <div className="container-fluid">
-          {/* Small boxes (Stat box) */}
-          <div className="row">
-            <div className="col-lg-3 col-6">
-              {/* small box */}
-              <div className="small-box bg-info">
-                <div className="inner">
-                  <h3>150</h3>
-                  <p>New Orders</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-bag" />
-                </div>
-                <a href="#" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            {/* ./col */}
-            <div className="col-lg-3 col-6">
-              {/* small box */}
-              <div className="small-box bg-success">
-                <div className="inner">
-                  <h3>
-                    53<sup style={{ fontSize: 20 }}>%</sup>
-                  </h3>
-                  <p>Bounce Rate</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-stats-bars" />
-                </div>
-                <a href="#" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            {/* ./col */}
-            <div className="col-lg-3 col-6">
-              {/* small box */}
-              <div className="small-box bg-warning">
-                <div className="inner">
-                  <h3>44</h3>
-                  <p>User Registrations</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-person-add" />
-                </div>
-                <a href="#" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            {/* ./col */}
-            <div className="col-lg-3 col-6">
-              {/* small box */}
-              <div className="small-box bg-danger">
-                <div className="inner">
-                  <h3>65</h3>
-                  <p>Unique Visitors</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-pie-graph" />
-                </div>
-                <a href="#" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            {/* ./col */}
-          </div>
-          {/* /.row */}
-          <div className="row">
-            <div className="col-md-6">
-              {/* Temperature */}
-              <div className="card card-primary">
-                <div className="card-header">
-                  <h3 className="card-title">Temperature</h3>
-
-                  <div class="card-tools">
-                    <button
-                      type="button"
-                      class="btn btn-tool"
-                      data-card-widget="collapse"
-                    >
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-tool"
-                      data-card-widget="remove"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
+        </section>
+        <section className="content">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-6">
+                <div className="card card-danger">
+                  <div className="card-header">
+                    <h3 className="card-title">Temperature</h3>
+                  </div>
+                  <div className="card-body">
+                    <canvas ref={areaChartRef} style={{ minHeight: 250, height: 250 }} />
                   </div>
                 </div>
-                <div className="card-body">
-                  <canvas
-                    ref={areaChartRef}
-                    style={{ minHeight: 250, height: 250 }}
-                  />
-                </div>
-              </div>
-              {/* Humidity */}
-              <div className="card card-primary">
-                <div className="card-header">
-                  <h3 className="card-title">Humidity</h3>
-
-                  <div class="card-tools">
-                    <button
-                      type="button"
-                      class="btn btn-tool"
-                      data-card-widget="collapse"
-                    >
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-tool"
-                      data-card-widget="remove"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
+                <div className="card card-primary">
+                  <div className="card-header">
+                    <h3 className="card-title">Humidity</h3>
+                  </div>
+                  <div className="card-body">
+                    <canvas ref={humidChartRef} style={{ minHeight: 250, height: 250 }} />
                   </div>
                 </div>
-                <div className="card-body">
-                  <canvas
-                    ref={humidChartRef}
-                    style={{ minHeight: 250, height: 250 }}
-                  />
-                </div>
               </div>
-            </div>
-
-            <div className="col-md-6">
-              {/* Brightness */}
-              <div className="card card-info">
-                <div className="card-header">
-                  <h3 className="card-title">Brightness</h3>
-
-                  <div class="card-tools">
-                    <button
-                      type="button"
-                      class="btn btn-tool"
-                      data-card-widget="collapse"
-                    >
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-tool"
-                      data-card-widget="remove"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
+              <div className="col-md-6">
+                <div className="card card-info">
+                  <div className="card-header">
+                    <h3 className="card-title">Brightness</h3>
+                  </div>
+                  <div className="card-body">
+                    <canvas ref={meterChartRef} style={{ minHeight: 250, height: 250 }} />
                   </div>
                 </div>
-                <div className="card-body">
-                  <canvas
-                    ref={meterChartRef}
-                    style={{ minHeight: 250, height: 250 }}
-                  />
-                </div>
               </div>
-              {/* Bootstrap Switch */}
-              <div className="card card-secondary">
-                <div className="card-header">
-                  <h3 className="card-title">Bootstrap Switch</h3>
-                </div>
-                <div className="card-body">
-                  <input
-                    type="checkbox"
-                    name="my-checkbox"
-                    defaultChecked
-                    data-bootstrap-switch
-                  />
-                  <input
-                    type="checkbox"
-                    name="my-checkbox"
-                    defaultChecked
-                    data-bootstrap-switch
-                    data-off-color="danger"
-                    data-on-color="success"
-                  />
-                </div>
-              </div>
-              {/* /.card */}
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </DefaultLayout>
   );
 }
 
