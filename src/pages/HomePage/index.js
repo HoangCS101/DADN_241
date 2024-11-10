@@ -5,6 +5,7 @@ import { Chart } from "chart.js/auto";
 import axios from "axios";
 import { DefaultLayout } from "../../layouts";
 
+const cx = classNames.bind(styles); 
 function Home() {
   const [sensorData, setSensorData] = useState({
     temperatureData: [],
@@ -187,12 +188,12 @@ function Home() {
 
   return (
     <DefaultLayout>
-      <div className="content-wrapper">
+      <div className={cx('content-wrapper')}>
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Thống kê sử dụng</h1>
+                <h1 className={cx('title-homepage')}>Thống kê sử dụng</h1>
               </div>
             </div>
           </div>

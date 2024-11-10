@@ -2,17 +2,13 @@
   padding-left: 70px;
   padding-top: 20px;
 }
-
-.homepage-title {
-  font-size: 30px;
-  font-weight: 600;
-  text-transform: uppercase;
+.title-homepage{
+  font-size: 40px;
+  font-weight: 500;
   color: #115ca8;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  margin-top: 40px;
+  text-transform: uppercase;
 }
+
 .icon-image {
   width: 50px;
   height: 50px;
@@ -22,7 +18,6 @@
 .icon-image-2 {
   width: 50px;
 }
-
 
 .cart-component {
   padding: 20px;
@@ -77,4 +72,9 @@
 .num-temperature {
   font-size: 50px;
   font-weight: 500;
+}
+
+.content-wrapper {
+  margin-left: 0 !important;
+  padding-left: 30px;
 }
