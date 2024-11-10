@@ -1,0 +1,117 @@
+.switch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.wrapper_control_device {
+  padding: 30px 60px;
+}
+.control_device-title {
+  font-size: 40px;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 20px;
+  color: #ffa556;
+  background: linear-gradient(rgba(17, 92, 168, 0.8), rgba(17, 92, 168, 0.2)),
+    url("../../assets/background/background_electrical.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 350px;
+  border-radius: 20px;
+}
+
+.switch {
+  width: 90px;
+  height: 40px;
+  border-radius: 30px;
+  background-color: #808080;
+  position: relative;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.switch.on {
+  background-color: #4caf50;
+}
+
+.switch.off {
+  background-color: #808080;
+}
+
+.ball {
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  transition: left 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #cf2525;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.switch.on .ball {
+  left: 55px;
+}
+
+.switch.off .ball {
+  left: 5px;
+}
+.device-item {
+  aspect-ratio: 1.6;
+  border-radius: 10px;
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 600px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.list-devices {
+  padding: 0 50px;
+  column-gap: 20px;
+  row-gap: 20px;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.device-title {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 10px 20px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.device-item:nth-child(1) > .device-title {
+  background: #ffa556;
+  color: #fff;
+}
+.device-item:nth-child(2) > .device-title {
+  background: #17a0b6;
+  color: #fff;
+}
+.device-item:nth-child(3) > .device-title {
+  background: #dc3545;
+  color: #fff;
+}
+.device-item:nth-child(4) > .device-title {
+  background: #007bff;
+  color: #fff;
+}
+.image-device {
+  height: 150px;
+}
+
+.device-status {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
