@@ -41,7 +41,7 @@ function SideNav() {
           </div>
         </Link>
 
-        <Link to="/">
+        {/* <Link to="/">
           <div className={cx("sidenav-item")}>
             <div className={cx("sidenav-icon")}>
               <FontAwesomeIcon
@@ -73,7 +73,7 @@ function SideNav() {
             </div>
             <div className={cx("sidenav-content")}>Thông báo hệ thống</div>
           </div>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
