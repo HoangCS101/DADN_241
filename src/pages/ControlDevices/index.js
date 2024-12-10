@@ -25,7 +25,7 @@ const LightSwitch = () => {
         },
         {
           headers: {
-            "X-AIO-Key": "aio_OUwm14UEHdkyxwGU0wwrODMG2QeA",
+            "X-AIO-Key": process.env.REACT_APP_ADF_KEY,
             "Content-Type": "application/json",
           },
         }
@@ -67,7 +67,7 @@ const FanSwitch = () => {
         },
         {
           headers: {
-            "X-AIO-Key": "aio_OUwm14UEHdkyxwGU0wwrODMG2QeA",
+            "X-AIO-Key": process.env.REACT_APP_ADF_KEY,
             "Content-Type": "application/json",
           },
         }
@@ -108,7 +108,7 @@ const DoorSwitch = () => {
         },
         {
           headers: {
-            "X-AIO-Key": "aio_OUwm14UEHdkyxwGU0wwrODMG2QeA",
+            "X-AIO-Key": process.env.REACT_APP_ADF_KEY,
             "Content-Type": "application/json",
           },
         }
@@ -149,7 +149,7 @@ const PumpSwitch = () => {
         },
         {
           headers: {
-            "X-AIO-Key": "aio_OUwm14UEHdkyxwGU0wwrODMG2QeA",
+            "X-AIO-Key": process.env.REACT_APP_ADF_KEY,
             "Content-Type": "application/json",
           },
         }
