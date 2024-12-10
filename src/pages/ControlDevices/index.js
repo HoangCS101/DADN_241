@@ -1,4 +1,4 @@
-import classNames from "classnames/bind";
+import classNames from "classnames/bind"
 import styles from "./ControlDevices.module.scss";
 import { DefaultLayout } from "../../layouts";
 import React, { useState } from "react";
@@ -13,6 +13,9 @@ const LightSwitch = () => {
   const [isLightOn, setIsLightOn] = useState(false);
 
   const handleToggle = async () => {
+    console.log(">>> check env: ", process.env.REACT_APP_NAME_ADF_KEY);
+    console.log(">>> check env: ", process.env.REACT_APP_ADF_KEY);
+
     const newStatus = isLightOn ? "0" : "1";
 
     try {
@@ -25,7 +28,7 @@ const LightSwitch = () => {
         },
         {
           headers: {
-            "X-AIO-Key": process.env.REACT_APP_ADF_KEY,
+            [process.env.REACT_APP_NAME_ADF_KEY]: process.env.REACT_APP_ADF_KEY,
             "Content-Type": "application/json",
           },
         }
@@ -67,7 +70,7 @@ const FanSwitch = () => {
         },
         {
           headers: {
-            "X-AIO-Key": process.env.REACT_APP_ADF_KEY,
+            [process.env.REACT_APP_NAME_ADF_KEY]: process.env.REACT_APP_ADF_KEY,
             "Content-Type": "application/json",
           },
         }
@@ -108,7 +111,7 @@ const DoorSwitch = () => {
         },
         {
           headers: {
-            "X-AIO-Key": process.env.REACT_APP_ADF_KEY,
+            [process.env.REACT_APP_NAME_ADF_KEY]: process.env.REACT_APP_ADF_KEY,
             "Content-Type": "application/json",
           },
         }
@@ -149,7 +152,7 @@ const PumpSwitch = () => {
         },
         {
           headers: {
-            "X-AIO-Key": process.env.REACT_APP_ADF_KEY,
+            [process.env.REACT_APP_NAME_ADF_KEY]: process.env.REACT_APP_ADF_KEY,
             "Content-Type": "application/json",
           },
         }
