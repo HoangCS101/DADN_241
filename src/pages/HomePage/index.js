@@ -5,6 +5,7 @@ import { Chart } from "chart.js/auto";
 import axios from "axios";
 import { DefaultLayout } from "../../layouts";
 
+const cx = classNames.bind(styles); 
 function Home() {
   const [sensorData, setSensorData] = useState({
     temperatureData: [],
@@ -187,12 +188,12 @@ function Home() {
 
   return (
     <DefaultLayout>
-      <div className="content-wrapper">
+      <div className={cx('content-wrapper')}>
         <section className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Graph Monitor</h1>
+                <h1 className={cx('title-homepage')}>Graph Monitor</h1>
               </div>
             </div>
           </div>
@@ -203,7 +204,7 @@ function Home() {
               <div className="col-md-6">
                 <div className="card card-danger">
                   <div className="card-header">
-                    <h3 className="card-title">Temperature</h3>
+                    <h3 className="card-title">Nhiệt độ</h3>
                   </div>
                   <div className="card-body">
                     <canvas ref={areaChartRef} style={{ minHeight: 250, height: 250 }} />
@@ -211,7 +212,7 @@ function Home() {
                 </div>
                 <div className="card card-primary">
                   <div className="card-header">
-                    <h3 className="card-title">Humidity</h3>
+                    <h3 className="card-title">Độ ẩm</h3>
                   </div>
                   <div className="card-body">
                     <canvas ref={humidChartRef} style={{ minHeight: 250, height: 250 }} />
@@ -221,7 +222,7 @@ function Home() {
               <div className="col-md-6">
                 <div className="card card-info">
                   <div className="card-header">
-                    <h3 className="card-title">Brightness</h3>
+                    <h3 className="card-title">Độ sáng</h3>
                   </div>
                   <div className="card-body">
                     <canvas ref={meterChartRef} style={{ minHeight: 250, height: 250 }} />

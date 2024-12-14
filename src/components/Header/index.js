@@ -1,6 +1,23 @@
 import React from "react";
+import { useState } from "react";
+import styles from "./Header.component.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+import classNames from "classnames/bind";
+import logo from "../../assets/images/logo_smart_house.png";
+import avatar from "../../assets/images/avartar_user.png";
+import { Link } from "react-router-dom";
+import LogoutForm from "./../Logout/index.js";
 
+const cx = classNames.bind(styles);
 function Header() {
+  const [isLogout, setLogout] = useState(false);
+  const handleLogout = () => {
+    console.log(">>> remove token: ", localStorage.getItem("authToken"));
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("dataUser");
+    window.location.href = "/sign-in";
+  };
   return (
     <div>
       {/* Navbar */}
@@ -190,17 +207,25 @@ function Header() {
               <i className="fas fa-expand-arrows-alt" />
             </a>
           </li>
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-widget="control-sidebar"
-              data-controlsidebar-slide="true"
-              href="#"
-              role="button"
-            >
-              <i className="fas fa-th-large" />
-            </a>
+          <li
+            className={cx("nav-item")}
+            className="nav-item"
+            onClick={() => setLogout(true)}
+          >
+            <img className={cx("avatar")} src={avatar} alt="" />
           </li>
+          {/* Logout form */}
+          {isLogout && (
+            <LogoutForm
+              onConfirm={() => {
+                handleLogout();
+                setLogout(false);
+              }}
+              onCancel={() => {
+                setLogout(false);
+              }}
+            ></LogoutForm>
+          )}
         </ul>
       </nav>
       {/* /.navbar */}

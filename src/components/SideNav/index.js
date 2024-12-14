@@ -1,6 +1,15 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import classNames from "classnames/bind";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChartColumn } from "@fortawesome/free-solid-svg-icons";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+import styles from "./SideNav.component.scss";
 
+const cx = classNames.bind(styles);
 function SideNav() {
   return (
     <div>
@@ -63,14 +72,14 @@ function SideNav() {
                 {/* <a href="#" className="nav-link active"> */}
                 <Link to="/" className="nav-link">
                   <i className="nav-icon far fa-image" />
-                  <p>Home</p>
+                  <p>Thống kê sử dụng</p>
                 </Link>
                 {/* </a> */}
               </li>
               <li className="nav-item">
-                <Link to="/dashboard" className="nav-link">
+                <Link to="/control-device" className="nav-link">
                   <i className="nav-icon far fa-image" />
-                  <p>Dashboard</p>
+                  <p>Điều khiển thiết bị</p>
                 </Link>
               </li>
               <li className="nav-item">

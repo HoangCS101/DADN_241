@@ -3,12 +3,18 @@ import styles from "./DefaultLayout.layout.scss";
 import { Header, Footer, SideNav } from "../../components";
 
 const cx = classNames.bind(styles);
-function DefaultLayout({children}) {
+function DefaultLayout({ children }) {
   return (
     <>
       <Header />
-      <SideNav />
-      <div>{children}</div>
+      <div className={cx("default-layout")}>
+        <div className={cx("sidenav")}>
+          <SideNav />
+        </div>
+        <div className={cx("other-content")}>
+          <div>{children}</div>
+        </div>
+      </div>
       <Footer />
     </>
   );
