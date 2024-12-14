@@ -192,7 +192,7 @@ function Home() {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>ChartJS</h1>
+                <h1>Graph Monitor</h1>
               </div>
             </div>
           </div>
